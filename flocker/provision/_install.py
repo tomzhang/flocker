@@ -5,7 +5,6 @@ Install flocker on a remote node.
 """
 
 from pipes import quote as shell_quote
-from StringIO import StringIO
 import posixpath
 from textwrap import dedent
 from urlparse import urljoin
@@ -16,26 +15,20 @@ CLUSTERHQ_REPO = ("https://storage.googleapis.com/archive.clusterhq.com/"
                   "fedora/clusterhq-release$(rpm -E %dist).noarch.rpm")
 
 
-class FabricRunner(object):
+class IPCRunner(object):
     def __init__(self, username, address):
-        self.host_string = "%s@%s" % (username, address)
-
-    def _run_in_context(self, f, *args, **kwargs):
-        from fabric.api import settings
-        with settings(
-                connection_attempts=24,
-                timeout=5,
-                pty=False,
-                host_string=self.host_string):
-            f(*args, **kwargs)
+        from flocker.common import ProcessNode
+        self._node = ProcessNode.using_ssh(
+            host=address, port=22, username=username,
+            private_key=None)
 
     def run(self, command):
-        from fabric.api import run
-        self._run_in_context(run, command)
+        # Saddness of sh -c
+        print self._node.get_output(['sh', '-c', command])
 
     def put(self, content, path):
-        from fabric.api import put
-        self._run_in_context(StringIO(put), content, path)
+        with self._node.run(['dd', 'of=' + path]) as f:
+            f.write(content)
 
 
 def _task_install_kernel(runner):
@@ -144,8 +137,5 @@ def install(nodes, username, kwargs):
     :param dict kwargs: Addtional arguments to pass to ``_task_install``.
     """
     for address in nodes:
-        runner = FabricRunner(username, address)
+        runner = IPCRunner(username, address)
         _task_install(runner, **kwargs)
-
-    from fabric.network import disconnect_all
-    disconnect_all()
