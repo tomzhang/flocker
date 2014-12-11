@@ -97,14 +97,14 @@ class ProcessNode(object):
         :param int port: The port number of the SSH server.
         :param bytes username: The username to SSH as.
         :param FilePath private_key: Path to private key to use when talking to
-            SSH server.
+            SSH server, or ``None`` to use keys from a ssh-agent.
 
         :return: ``ProcessNode`` instance that communicates over SSH.
         """
-        return cls(initial_command_arguments=(
+        initial_command_arguments = [
             b"ssh",
             b"-q",  # suppress warnings
-            b"-i", private_key.path,
+            ] + ([b"-i", private_key.path] if private_key else []) + [
             b"-l", username,
             # We're ok with unknown hosts; we'll be switching away from
             # SSH by the time Flocker is production-ready and security is
@@ -114,11 +114,14 @@ class ProcessNode(object):
             # ever close the connection to the test server.
             b"-oControlMaster=no",
             # On some Ubuntu versions (and perhaps elsewhere) not
-            # disabling this leads for mDNS lookups on every SSH, which
-            # can slow down connections very noticeably:
+            # disabling GSSAPIAuthentication leads for mDNS lookups on every
+            # SSH, which can slow down connections very noticeably.
+            # Ignore the option where it isn't supported.
             b"-o", b"IgnoreUnknown=GSSAPIAuthentication",
             b"-o", b"GSSAPIAuthentication=no",
-            b"-p", b"%d" % (port,), host), quote=quote)
+            b"-p", b"%d" % (port,), host]
+        return cls(initial_command_arguments=tuple(initial_command_arguments),
+                   quote=quote)
 
 
 @implementer(INode)

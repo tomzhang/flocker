@@ -10,7 +10,7 @@ from twisted.trial.unittest import TestCase
 
 from .. import ProcessNode
 from ..test.test_ipc import make_inode_tests
-from ...testtools import create_ssh_server
+from ...testtools import create_ssh_server, create_ssh_agent
 
 
 def make_prefixless_processnode(test_case):
@@ -108,6 +108,17 @@ def make_sshnode(test_case):
     return ProcessNode.using_ssh(
         host=unicode(server.ip).encode("ascii"), port=server.port,
         username=b"root", private_key=server.key_path)
+
+
+def make_sshnode(test_case):
+    server = create_ssh_server(FilePath(test_case.mktemp()))
+    test_case.addCleanup(server.restore)
+
+    create_ssh_agent(server.key_path, test_case)
+
+    return ProcessNode.using_ssh(
+        host=unicode(server.ip).encode("ascii"), port=server.port,
+        username=b"root", private_key=None)
 
 
 class SSHProcessNodeTests(TestCase):
