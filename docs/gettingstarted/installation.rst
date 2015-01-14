@@ -14,100 +14,104 @@ These utilities are called by ``flocker-deploy`` (via SSH) to install and migrat
 
 .. note:: If you're interested in developing Flocker (as opposed to simply using it) see :doc:`../gettinginvolved/contributing`.
 
+
+
 .. _installing-flocker-cli:
 
 Installing ``flocker-cli``
 ==========================
 
-Linux
------
+.. tabs::
+ 
+        Linux
+        -----
 
-Before you install ``flocker-cli`` you will need a compiler, Python 2.7, and the ``virtualenv`` Python utility installed.
-On Fedora 20 you can install these by running:
+        Before you install ``flocker-cli`` you will need a compiler, Python 2.7, and the ``virtualenv`` Python utility installed.
+        On Fedora 20 you can install these by running:
 
-.. code-block:: console
+        .. code-block:: console
 
-   alice@mercury:~$ sudo yum install @buildsys-build python python-devel python-virtualenv
+           alice@mercury:~$ sudo yum install @buildsys-build python python-devel python-virtualenv
 
-On Ubuntu or Debian you can run:
+        On Ubuntu or Debian you can run:
 
-.. code-block:: console
+        .. code-block:: console
 
-   alice@mercury:~$ sudo apt-get install gcc python2.7 python-virtualenv python2.7-dev
+           alice@mercury:~$ sudo apt-get install gcc python2.7 python-virtualenv python2.7-dev
 
-Then run the following script to install ``flocker-cli``:
+        Then run the following script to install ``flocker-cli``:
 
-:download:`linux-install.sh`
+        :download:`linux-install.sh`
 
-.. literalinclude:: linux-install.sh
-   :language: sh
+        .. literalinclude:: linux-install.sh
+           :language: sh
 
-Save the script to a file and then run it:
+        Save the script to a file and then run it:
 
-.. code-block:: console
+        .. code-block:: console
 
-   alice@mercury:~$ sh linux-install.sh
-   ...
-   alice@mercury:~$
+           alice@mercury:~$ sh linux-install.sh
+           ...
+           alice@mercury:~$
 
-The ``flocker-deploy`` command line program will now be available in ``flocker-tutorial/bin/``:
+        The ``flocker-deploy`` command line program will now be available in ``flocker-tutorial/bin/``:
 
-.. code-block:: console
+        .. code-block:: console
 
-   alice@mercury:~$ cd flocker-tutorial
-   alice@mercury:~/flocker-tutorial$ bin/flocker-deploy --version
-   0.3.2
-   alice@mercury:~/flocker-tutorial$
+           alice@mercury:~$ cd flocker-tutorial
+           alice@mercury:~/flocker-tutorial$ bin/flocker-deploy --version
+           0.3.2
+           alice@mercury:~/flocker-tutorial$
 
-If you want to omit the prefix path you can add the appropriate directory to your ``$PATH``.
-You'll need to do this every time you start a new shell.
+        If you want to omit the prefix path you can add the appropriate directory to your ``$PATH``.
+        You'll need to do this every time you start a new shell.
 
-.. code-block:: console
+        .. code-block:: console
 
-   alice@mercury:~/flocker-tutorial$ export PATH="${PATH:+${PATH}:}${PWD}/bin"
-   alice@mercury:~/flocker-tutorial$ flocker-deploy --version
-   0.3.2
-   alice@mercury:~/flocker-tutorial$
+           alice@mercury:~/flocker-tutorial$ export PATH="${PATH:+${PATH}:}${PWD}/bin"
+           alice@mercury:~/flocker-tutorial$ flocker-deploy --version
+           0.3.2
+           alice@mercury:~/flocker-tutorial$
 
-OS X
-----
+        OS X
+        ----
 
-Install the `Homebrew`_ package manager.
+        Install the `Homebrew`_ package manager.
 
-Make sure Homebrew has no issues:
+        Make sure Homebrew has no issues:
 
-.. code-block:: console
+        .. code-block:: console
 
-   alice@mercury:~$ brew doctor
-   ...
-   alice@mercury:~$
+           alice@mercury:~$ brew doctor
+           ...
+           alice@mercury:~$
 
-Fix anything which ``brew doctor`` recommends that you fix by following the instructions it outputs.
+        Fix anything which ``brew doctor`` recommends that you fix by following the instructions it outputs.
 
-Add the ``ClusterHQ/flocker`` tap to Homebrew and install ``flocker``:
+        Add the ``ClusterHQ/flocker`` tap to Homebrew and install ``flocker``:
 
-.. code-block:: console
+        .. code-block:: console
 
-   alice@mercury:~$ brew tap ClusterHQ/tap
-   ...
-   alice@mercury:~$ brew install flocker-0.3.2
-   ...
-   alice@mercury:~$ brew test flocker-0.3.2
-   ...
-   alice@mercury:~$
+           alice@mercury:~$ brew tap ClusterHQ/tap
+           ...
+           alice@mercury:~$ brew install flocker-0.3.2
+           ...
+           alice@mercury:~$ brew test flocker-0.3.2
+           ...
+           alice@mercury:~$
 
-You can see the Homebrew recipe in the `homebrew-tap`_ repository.
+        You can see the Homebrew recipe in the `homebrew-tap`_ repository.
 
-The ``flocker-deploy`` command line program will now be available:
+        The ``flocker-deploy`` command line program will now be available:
 
-.. code-block:: console
+        .. code-block:: console
 
-   alice@mercury:~$ flocker-deploy --version
-   0.3.2
-   alice@mercury:~$
+           alice@mercury:~$ flocker-deploy --version
+           0.3.2
+           alice@mercury:~$
 
-.. _Homebrew: http://brew.sh
-.. _homebrew-tap: https://github.com/ClusterHQ/homebrew-tap
+        .. _Homebrew: http://brew.sh
+        .. _homebrew-tap: https://github.com/ClusterHQ/homebrew-tap
 
 .. _installing-flocker-node:
 
