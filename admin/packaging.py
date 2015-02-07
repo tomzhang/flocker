@@ -421,6 +421,7 @@ class GetPackageVersion(object):
             if len(parts) == 2:
                 key, value = parts
                 if key.lower() == 'version':
+                    log.msg(format="Got version %(version)s, %(rpm_version)s", version=value, rpm_vesion=make_rpm_version(value))
                     self.version = value
                     return
 
@@ -1042,6 +1043,8 @@ class DockerBuildScript(object):
         :param base_path: ignored.
         """
         options = DockerBuildOptions()
+        log.startLogging(sys.stderr)
+        log.msg("Starting")
 
         try:
             options.parseOptions(self.sys_module.argv[1:])
