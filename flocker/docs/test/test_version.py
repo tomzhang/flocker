@@ -42,16 +42,16 @@ class ParseVersionTests(SynchronousTestCase):
         When the version is from a weekly release, the documentation version
         is left unchanged.
         """
-        self.assertParsedVersion('0.3.2dev1',
+        self.assertParsedVersion('0.3.2.dev1',
                                  weekly_release='1')
 
-    def test_pre_release(self):
+    def test_release_candidate(self):
         """
-        When the version is from a pre-release, the documentation version
+        When the version is from a release candidate, the documentation version
         is left unchanged.
         """
-        self.assertParsedVersion('0.3.2pre1',
-                                 pre_release='1')
+        self.assertParsedVersion('0.3.2.rc1',
+                                 release_candidate='1')
 
     def test_development_vesion(self):
         """
@@ -113,14 +113,14 @@ class GetDocVersionTests(SynchronousTestCase):
         When the version is from a weekly release, the documentation version
         is left unchanged.
         """
-        self.assertEqual(get_doc_version('0.3.2dev1'), '0.3.2dev1')
+        self.assertEqual(get_doc_version('0.3.2.dev1'), '0.3.2.dev1')
 
-    def test_pre_release(self):
+    def test_release_candidate(self):
         """
-        When the version is from a pre-release, the documentation version
+        When the version is from a release candidate, the documentation version
         is left unchanged.
         """
-        self.assertEqual(get_doc_version('0.3.2pre1'), '0.3.2pre1')
+        self.assertEqual(get_doc_version('0.3.2.rc1'), '0.3.2.rc1')
 
     def test_development_vesion(self):
         """
@@ -170,14 +170,14 @@ class GetInstallableVersionTests(SynchronousTestCase):
         When the version is from a weekly release, the installable version
         is left unchanged.
         """
-        self.assertEqual(get_installable_version('0.3.2dev1'), '0.3.2dev1')
+        self.assertEqual(get_installable_version('0.3.2.dev1'), '0.3.2.dev1')
 
-    def test_pre_release(self):
+    def test_release_candidate(self):
         """
-        When the version is from a pre-release, the installable version
+        When the version is from a release candidate, the installable version
         is left unchanged.
         """
-        self.assertEqual(get_installable_version('0.3.2pre1'), '0.3.2pre1')
+        self.assertEqual(get_installable_version('0.3.2.rc1'), '0.3.2.rc1')
 
     def test_development_version(self):
         """
@@ -224,13 +224,13 @@ class IsReleaseTests(SynchronousTestCase):
         """
         When the version is from a weekly release, it isn't a release.
         """
-        self.assertFalse(is_release('0.3.2dev1'))
+        self.assertFalse(is_release('0.3.2.dev1'))
 
-    def test_pre_release(self):
+    def test_release_candidate(self):
         """
-        When the version is from a pre-release, it isn't a release.
+        When the version is from a release candidate, it isn't a release.
         """
-        self.assertFalse(is_release('0.3.2pre1'))
+        self.assertFalse(is_release('0.3.2.rc1'))
 
     def test_development_version(self):
         """

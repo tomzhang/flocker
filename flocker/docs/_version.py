@@ -8,10 +8,10 @@ from characteristic import attributes, Attribute
 _VERSION_RE = re.compile(
     # The base version
     r"(?P<major>[0-9])\.(?P<minor>[0-9]+)\.(?P<micro>[0-9]+)"
-    # Pre-release
-    r"(pre(?P<pre_release>[0-9]+))?"
+    # Release candidate
+    r"(\.rc(?P<release_candidate>[0-9]+))?"
     # Weekly release
-    r"(dev(?P<weekly_release>[0-9]+))?"
+    r"(\.dev(?P<weekly_release>[0-9]+))?"
     # The documentation release
     r"(\+doc(?P<documentation_revision>[0-9]+))?"
     # Development version
@@ -33,7 +33,7 @@ class UnparseableVersion(Exception):
     'major',
     'minor',
     'micro',
-    Attribute('pre_release', default_value=None),
+    Attribute('release_candidate', default_value=None),
     Attribute('weekly_release', default_value=None),
     Attribute('documentation_revision', default_value=None),
     Attribute('commit_count', default_value=None),
@@ -47,8 +47,8 @@ class FlockerVersion(object):
     :ivar str major: The major number of the (most recent) release.
     :ivar str minor: The minor number of the (most recent) release.
     :ivar str micro: The micro number of the (most recent) release.
-    :ivar str pre_release: The number of the (most recent) pre-release,
-        or ``None`` if there hasn't been a pre release.
+    :ivar str release_candidate: The number of the (most recent) release
+        candidate, or ``None`` if there hasn't been a release candidate.
     :ivar str weekly_release: The number of the (most recent) weekly release,
         or ``None`` if there hasn't been a weekly release.
     :ivar str documentation_revision: The documentation revision of the
@@ -74,13 +74,13 @@ class FlockerVersion(object):
         """
         The version string of the last release of Flocker which can be
         installed (CLI or node package). These are updated for marketing
-        releases, pre-releases and weekly releases but not documentation
+        releases, release candidatess and weekly releases but not documentation
         releases.
         """
         if self.weekly_release is not None:
-            return self.release + 'dev' + self.weekly_release
-        elif self.pre_release is not None:
-            return self.release + 'pre' + self.pre_release
+            return self.release + '.dev' + self.weekly_release
+        elif self.release_candidate is not None:
+            return self.release + '.rc' + self.release_candidate
         return self.release
 
 
@@ -111,6 +111,7 @@ def get_doc_version(version):
     else:
         return version
 
+
 def get_installable_version(version):
     """
     Get the version string of the latest version of Flocker which can be
@@ -119,6 +120,7 @@ def get_installable_version(version):
     parsed_version = parse_version(version)
     return parsed_version.installable_release
 
+
 def is_release(version):
     """
     Return whether the version corresponds to a marketing or documentation
@@ -126,6 +128,6 @@ def is_release(version):
     """
     parsed_version = parse_version(version)
     return (parsed_version.commit_count is None
-            and parsed_version.pre_release is None
+            and parsed_version.release_candidate is None
             and parsed_version.weekly_release is None
             and parsed_version.dirty is None)
